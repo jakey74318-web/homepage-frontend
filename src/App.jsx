@@ -6,19 +6,21 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
-  
-  const BASE_URL = import.meta.env.VITE_API_URL;
+  const [projects, setProjects] = useState([])
+
+  const BASE_URL = import.meta.env.VITE_API_URL
 
   useEffect(() => {
     fetch(`${BASE_URL}/api/projects`)
       .then(res => res.json())
       .then(data => {
-        console.log("백엔드 응답:", data);
+        console.log("백엔드 응답:", data)
+        setProjects(data)
       })
       .catch(err => {
-        console.error("API 호출 실패:", err);
-      });
-  }, []);
+        console.error("API 호출 실패:", err)
+      })
+  }, [])
 
   return (
     <>
@@ -28,12 +30,14 @@ function App() {
           <img src={reactLogo} className="framework" alt="React logo" />
           <img src={viteLogo} className="vite" alt="Vite logo" />
         </div>
+
         <div>
           <h1>Get started</h1>
           <p>
             Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
           </p>
         </div>
+
         <button
           type="button"
           className="counter"
@@ -41,6 +45,22 @@ function App() {
         >
           Count is {count}
         </button>
+
+        <hr />
+
+        <h2>백엔드 프로젝트 목록</h2>
+
+        {projects.length === 0 ? (
+          <p>불러오는 중...</p>
+        ) : (
+          <ul>
+            {projects.map(project => (
+              <li key={project.id}>
+                <strong>{project.title}</strong> ({project.tech})
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <div className="ticks"></div>
@@ -67,6 +87,7 @@ function App() {
             </li>
           </ul>
         </div>
+
         <div id="social">
           <svg className="icon" role="presentation" aria-hidden="true">
             <use href="/icons.svg#social-icon"></use>
